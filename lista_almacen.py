@@ -44,6 +44,11 @@ from pathlib import Path
 
 # ---------------------------------------------------------------- parametros
 
+# Estos dos textos aparecen arriba de la lista. Se pueden editar libremente.
+HORARIOS = "Lunes y jueves de 17 a 19 h"
+QUIENES = ("Venta interna de la comunidad Ubuntu, solamente para integrantes "
+           "del grupo de compras colectivas.")
+
 TIENDA_CSV = "ubuntu"      # nombre de la tienda en las columnas del export CSV
 TIENDA_API = None          # nombre de la tienda en la API; None = la primera
 
@@ -284,6 +289,7 @@ def armar_html(productos, momento):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <title>Qué hay en el almacén — Proyecto Ubuntu</title>
 <meta name="description" content="Productos disponibles y precios del almacén de Proyecto Ubuntu.">
 <meta property="og:title" content="Qué hay en el almacén">
@@ -311,6 +317,17 @@ def armar_html(productos, momento):
     font-family: Fraunces, Georgia, serif; font-weight: 700;
     font-size: clamp(2.3rem, 11vw, 3.2rem); line-height: 0.98;
     letter-spacing: -0.015em; margin: 0 0 0.6rem;
+  }}
+  .aviso {{
+    margin: 0 0 0.35rem; padding-left: 0.85rem;
+    border-left: 3px solid var(--verde);
+    font-size: 0.95rem; max-width: 30rem;
+  }}
+  .horario {{
+    margin: 0 0 1.1rem; padding-left: 0.85rem;
+    border-left: 3px solid var(--verde);
+    font-family: Fraunces, Georgia, serif;
+    font-size: 1.15rem; font-weight: 500; color: var(--verde);
   }}
   .actualizado {{ color: var(--tinta-suave); font-size: 0.9rem; margin: 0 0 1.5rem; }}
   .actualizado strong {{ color: var(--verde); font-weight: 600; }}
@@ -360,6 +377,8 @@ def armar_html(productos, momento):
 
 <header>
   <h1>Qué hay hoy<br>en el almacén</h1>
+  <p class="aviso">{html.escape(QUIENES)}</p>
+  <p class="horario">{html.escape(HORARIOS)}</p>
   <p class="actualizado">Actualizado el <strong>{fecha_larga(momento)}</strong> a las {momento:%H:%M} · {len(productos)} productos disponibles</p>
 </header>
 
@@ -400,7 +419,8 @@ def armar_html(productos, momento):
 def armar_txt(productos, momento):
     granel = [p for p in productos if p["por_peso"]]
     unidad = [p for p in productos if not p["por_peso"]]
-    lineas = [f"*ALMACÉN UBUNTU — {fecha_larga(momento)}*", ""]
+    lineas = [f"*ALMACÉN UBUNTU — {fecha_larga(momento)}*", "", QUIENES,
+              f"Abrimos {HORARIOS[0].lower()}{HORARIOS[1:]}", ""]
     if granel:
         lineas.append("*A granel* (precio por kilo)")
         lineas += [f"{p['nombre']} — {pesos(p['precio'])}" for p in granel]
