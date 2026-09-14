@@ -47,7 +47,7 @@ from pathlib import Path
 # Estos dos textos aparecen arriba de la lista. Se pueden editar libremente.
 HORARIOS = "Lunes y jueves de 17 a 19 h"
 QUIENES = ("Venta interna de la comunidad Ubuntu, solamente para integrantes "
-           "del grupo de compras colectivas.")
+           "del grupo de compras colectivas (Webuntu).")
 
 TIENDA_CSV = "ubuntu"      # nombre de la tienda en las columnas del export CSV
 TIENDA_API = None          # nombre de la tienda en la API; None = la primera
