@@ -1,0 +1,8 @@
+# El token nunca va al repositorio
+.env
+token.txt
+
+# La página se genera sola en cada publicación
+publicado/
+prueba/
+__pycache__/

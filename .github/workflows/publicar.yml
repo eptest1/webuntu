@@ -1,0 +1,48 @@
+name: Publicar lista del almacén
+
+on:
+  # Cada hora, de 8 a 20 de Uruguay (los cron de GitHub van en UTC, UY = UTC-3)
+  schedule:
+    - cron: '0 11-23 * * *'
+  # Botón para publicar en el momento, sin esperar la hora
+  workflow_dispatch:
+  # También al cambiar el generador
+  push:
+    branches: [main]
+    paths: ['lista_almacen.py', '.github/workflows/publicar.yml']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacion.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generar la lista desde Loyverse
+        env:
+          LOYVERSE_TOKEN: ${{ secrets.LOYVERSE_TOKEN }}
+        run: python3 lista_almacen.py generar -o publicado
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: publicado
+
+      - id: publicacion
+        uses: actions/deploy-pages@v4
