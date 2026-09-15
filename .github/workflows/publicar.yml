@@ -3,7 +3,7 @@ name: Publicar lista del almacén
 on:
   # Cada hora, de 8 a 20 de Uruguay (los cron de GitHub van en UTC, UY = UTC-3)
   schedule:
-    - cron: '0 11-23 * * *'
+    - cron: '0 19-23 * * *'
   # Botón para publicar en el momento, sin esperar la hora
   workflow_dispatch:
   # También al cambiar el generador
